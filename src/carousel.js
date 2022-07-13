@@ -1,17 +1,24 @@
 import { useState, useEffect } from "react";
+import "/src/carousel.css";
+import { serialsData } from "/src/data.js";
 
 const AppHeader = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const updateIndex = (newIndex) => {
     if (newIndex < 0) {
-      newIndex = 3 - 1;
-    } else if (newIndex >= 3) {
+      newIndex = serialsData.length - 1;
+    } else if (newIndex >= serialsData.length) {
       newIndex = 0;
     }
 
     setActiveIndex(newIndex);
-    console.log(activeIndex);
+  };
+
+  const linkImg = () => {
+    const key =
+      serialsData[Math.floor(Math.random() * serialsData.length)].index;
+    return serialsData[key].item_img;
   };
 
   useEffect(() => {
@@ -32,48 +39,45 @@ const AppHeader = () => {
         <h1 className="display-1">Video-posters</h1>
       </header>
       <div
-        id="carouselExampleControls"
-        className="carousel slide"
+        id="carouselExampleFade"
+        className="carousel slide carousel-fade"
         data-bs-ride="carousel"
       >
         <div
           className="carousel-inner"
           style={{
-            transform: `translateX(-${activeIndex})`,
-            width: "100%",
-            height: "500px"
+            height: "400px"
           }}
         >
-          <div
-            style={{ backgroundColor: "gray" }}
-            className={`carousel-item ${activeIndex === 0 ? "active" : ""}`}
-          >
-            <img
-              src={window.location.origin + `/img/1604248414_610x900_5457.jpg`}
-              className=""
-              alt="1"
-            ></img>
-          </div>
-          <div
-            style={{ backgroundColor: "gray" }}
-            className={`carousel-item ${activeIndex === 1 ? "active" : ""}`}
-          >
-            <img
-              src={window.location.origin + `/img/1604314613_610x900_6358.jpg`}
-              className=""
-              alt="2"
-            ></img>
-          </div>
-          <div
-            style={{ backgroundColor: "gray" }}
-            className={`carousel-item ${activeIndex === 2 ? "active" : ""}`}
-          >
-            <img
-              src={window.location.origin + `/img/1604353236_610x900_39771.jpg`}
-              className=""
-              alt="3"
-            ></img>
-          </div>
+          {serialsData.map((serialItem) => {
+            return (
+              <div
+                key={serialItem.index}
+                className={`carousel-item ${
+                  activeIndex === +serialItem.index ? "active" : ""
+                }`}
+              >
+                <div style={{ display: "flex" }} className="slide-box">
+                  <img
+                    src={window.location.origin + `/img/${linkImg()}`}
+                    alt={serialItem.index}
+                  ></img>
+                  <img
+                    src={window.location.origin + `/img/${linkImg()}`}
+                    alt={serialItem.index}
+                  ></img>
+                  <img
+                    src={window.location.origin + `/img/${linkImg()}`}
+                    alt={serialItem.index}
+                  ></img>
+                  <img
+                    src={window.location.origin + `/img/${linkImg()}`}
+                    alt={serialItem.index}
+                  ></img>
+                </div>
+              </div>
+            );
+          })}
         </div>
         <button
           className="carousel-control-prev"
@@ -81,7 +85,7 @@ const AppHeader = () => {
             updateIndex(activeIndex - 1);
           }}
           type="button"
-          data-bs-target="#carouselExampleControls"
+          data-bs-target="#carouselExampleFade"
           data-bs-slide="prev"
         >
           <span
@@ -96,7 +100,7 @@ const AppHeader = () => {
             updateIndex(activeIndex + 1);
           }}
           type="button"
-          data-bs-target="#carouselExampleControls"
+          data-bs-target="#carouselExampleFade"
           data-bs-slide="next"
         >
           <span
